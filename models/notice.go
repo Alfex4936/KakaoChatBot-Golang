@@ -1,6 +1,7 @@
 package models
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -69,9 +70,10 @@ func Parse(url string, length int) []Notice { // doesn't support default value f
 }
 
 func CheckConnection() (ok bool) {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	_, err := http.Get(AjouLink)
-	if err != nil {
-		return false
+	if err == nil {
+		return true
 	}
-	return true
+	return false
 }

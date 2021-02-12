@@ -13,9 +13,7 @@ import (
 // GetSchedule :POST /schedule, MUST: "cate": 카테고리 이름
 func GetSchedule(c *gin.Context) {
 	if err := models.CheckConnection(); err == false {
-		errorMsg := models.SimpleText{Version: "2.0"}
-		errorMsg.Template.Outputs.SimpleText.Text = "인터넷 연결 확인 후 잠시 후 시도하세요."
-		c.JSON(404, errorMsg)
+		c.JSON(404, models.BuildSimpleText("인터넷 연결 확인 후 잠시 후 다시 시도해보세요."))
 		return
 	}
 	rand.Seed(time.Now().Unix()) // To pick a image for carousel card randomly

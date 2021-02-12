@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/gin-gonic/gin"
 	"github.com/go-gorp/gorp"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -27,9 +26,13 @@ func checkErr(err error, msg string) {
 	}
 }
 
-func Cors() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
-		c.Next()
-	}
-}
+// Cors (Cross-origin resource sharing) 교차 출처 리소스 공유
+// func Cors() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+// 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+// 		c.Writer.Header().Set("Access-Control-Allow-Headers", "*")
+// 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET")
+// 		c.Next()
+// 	}
+// }

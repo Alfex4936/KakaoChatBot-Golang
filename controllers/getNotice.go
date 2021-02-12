@@ -18,9 +18,7 @@ func GetAllNotices(c *gin.Context) {
 
 	var notices []models.Notice
 	if _, err := dbmap.Select(&notices, models.PrintNotices, num); err != nil {
-		errorMsg := models.SimpleText{Version: "2.0"}
-		errorMsg.Template.Outputs.SimpleText.Text = err.Error()
-		c.JSON(404, errorMsg)
+		c.JSON(404, models.BuildSimpleText(err.Error()))
 		return
 	}
 
@@ -32,9 +30,7 @@ func GetLastNotice(c *gin.Context) {
 	var notice models.Notice
 	// c.Bind(&notice)
 	if err := dbmap.SelectOne(&notice, models.PrintNotices, 1); err != nil {
-		errorMsg := models.SimpleText{Version: "2.0"}
-		errorMsg.Template.Outputs.SimpleText.Text = err.Error()
-		c.JSON(404, errorMsg)
+		c.JSON(404, models.BuildSimpleText(err.Error()))
 		return
 	}
 	c.PureJSON(200, notice)
@@ -42,10 +38,8 @@ func GetLastNotice(c *gin.Context) {
 
 // GetTodayNotices :POST /today
 func GetTodayNotices(c *gin.Context) {
-	if err := models.CheckConnection(); err != true {
-		errorMsg := models.SimpleText{Version: "2.0"}
-		errorMsg.Template.Outputs.SimpleText.Text = "인터넷 연결을 확인하세요."
-		c.JSON(404, errorMsg)
+	if !models.CheckConnection() {
+		c.JSON(404, models.BuildSimpleText("인터넷 연결을 확인하세요."))
 		return
 	}
 
@@ -112,9 +106,7 @@ func GetYesterdayNotices(c *gin.Context) {
 	yesterday := time.Now().Add(-24 * time.Hour)
 	var notices []models.Notice
 	if _, err := dbmap.Select(&notices, models.GetNoticesByDate, fmt.Sprint("%v.%02v.%v", yesterday.Year()%100, int(yesterday.Month()), yesterday.Day())); err != nil {
-		errorMsg := models.SimpleText{Version: "2.0"}
-		errorMsg.Template.Outputs.SimpleText.Text = err.Error()
-		c.JSON(404, errorMsg)
+		c.JSON(404, models.BuildSimpleText(err.Error()))
 		return
 	}
 	c.PureJSON(200, notices)

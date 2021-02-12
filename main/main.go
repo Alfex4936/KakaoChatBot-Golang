@@ -8,6 +8,6 @@ import (
 
 func main() {
 	mappings.CreateURLMappings()
-	// Listen and server on 0.0.0.0:8000
-	mappings.Router.Run(":8000")
+	// Listen and server on 0.0.0.0:8008
+	mappings.Router.Run(":8008")
 }
