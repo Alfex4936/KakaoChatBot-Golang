@@ -7,3 +7,6 @@ type Schedule struct {
 	StartDate string `db:"start_date" json:"date"`
 	EndDate   string `db:"end_date" json:"link"`
 }
+
+// CardImages ...
+var CardImages = []string{"ajou_carousel", "ajou_carousel_1", "ajou_carousel_2"}

@@ -106,3 +106,16 @@ func GetTodayNotices(c *gin.Context) {
 	listCard := gin.H{"version": "2.0", "template": template}
 	c.PureJSON(200, listCard)
 }
+
+// GetYesterdayNotices :POST /today
+func GetYesterdayNotices(c *gin.Context) {
+	yesterday := time.Now().Add(-24 * time.Hour)
+	var notices []models.Notice
+	if _, err := dbmap.Select(&notices, models.GetNoticesByDate, fmt.Sprint("%v.%02v.%v", yesterday.Year()%100, int(yesterday.Month()), yesterday.Day())); err != nil {
+		errorMsg := models.SimpleText{Version: "2.0"}
+		errorMsg.Template.Outputs.SimpleText.Text = err.Error()
+		c.JSON(404, errorMsg)
+		return
+	}
+	c.PureJSON(200, notices)
+}

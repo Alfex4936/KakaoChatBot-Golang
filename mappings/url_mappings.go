@@ -21,7 +21,9 @@ func CreateURLMappings() {
 		v1.GET("/notices/:num", controllers.GetAllNotices)
 		v1.POST("/last/", controllers.GetLastNotice)
 		v1.POST("/today/", controllers.GetTodayNotices)
+		v1.POST("/yesterday/", controllers.GetYesterdayNotices)
 		v1.POST("/ask/", controllers.AskCategory)
 		v1.POST("/ask/category", controllers.ShowCategory)
+		v1.POST("/schedule", controllers.GetSchedule)
 	}
 }

@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"kakao/models"
-	"net/http"
 	"strings"
 	"unicode/utf8"
 
@@ -13,17 +12,11 @@ import (
 
 // AskCategory :POST /ask, MUST: "cate": 카테고리 이름
 func AskCategory(c *gin.Context) {
-	categories := []string{"학사",
-		"학사일정",
-		"비교과",
-		"장학",
-		"취업",
-		"사무",
-		"행사",
-		"파란학기제",
-		"학술",
-		"입학",
-		"기타"}
+	categories := []string{"학사", "학사일정", "비교과",
+		"장학", "취업", "사무",
+		"행사", "파란학기제", "학술",
+		"입학", "기타",
+	}
 
 	var replies []gin.H
 	for _, cate := range categories {
@@ -42,18 +35,14 @@ func AskCategory(c *gin.Context) {
 func ShowCategory(c *gin.Context) {
 	// Check internet connection
 	if err := models.CheckConnection(); err == false {
-		errorMsg := models.SimpleText{Version: "2.0"}
-		errorMsg.Template.Outputs.SimpleText.Text = "인터넷 연결을 확인하세요."
-		c.JSON(404, errorMsg)
+		c.JSON(404, models.BuildSimpleText("인터넷 연결을 확인하세요."))
 		return
 	}
 
 	// JSON request parse
 	var kjson models.KakaoJSON
 	if err := c.BindJSON(&kjson); err != nil {
-		errorMsg := models.SimpleText{Version: "2.0"}
-		errorMsg.Template.Outputs.SimpleText.Text = err.Error()
-		c.JSON(http.StatusBadRequest, errorMsg)
+		c.JSON(200, models.BuildSimpleText(err.Error())) // http.StatusBadRequest
 		return
 	}
 
@@ -73,13 +62,12 @@ func ShowCategory(c *gin.Context) {
 	}
 
 	// Cast to string as cate parameter is an interface
-	userCategory := strings.ReplaceAll(kjson.Action.Params["cate"].(string), " ", "")
+	userCategory := strings.Replace(kjson.Action.Params["cate"].(string), " ", "", 1)
 	url := fmt.Sprintf("%v?mode=list&srCategoryId=%v&srSearchKey=&srSearchVal=&articleLimit=5&article.offset=0", models.AjouLink, categories[userCategory])
 
 	var notices []models.Notice = models.Parse(url, 5)
 	if len(notices) == 0 {
-		errorMsg := models.SimpleText{Version: "2.0"}
-		errorMsg.Template.Outputs.SimpleText.Text = "아주대학교 홈페이지 서버 반응이 늦고 있네요. 잠시 후 다시 시도해보세요."
+		c.JSON(404, models.BuildSimpleText("아주대학교 홈페이지 서버 반응이 늦고 있네요. 잠시 후 다시 시도해보세요."))
 		return
 	}
 

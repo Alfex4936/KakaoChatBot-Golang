@@ -59,3 +59,10 @@ type KakaoJSON struct {
 		Utterance string `json:"utterance"`
 	} `json:"userRequest"`
 }
+
+// BuildSimpleText ...
+func BuildSimpleText(msg string) SimpleText {
+	stext := SimpleText{Version: "2.0"}
+	stext.Template.Outputs.SimpleText.Text = msg
+	return stext
+}
