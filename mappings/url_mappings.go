@@ -6,9 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Router ...
 var Router *gin.Engine
 
-func CreateUrlMappings() {
+// CreateURLMappings to make endpoints
+func CreateURLMappings() {
 	// gin.SetMode(gin.ReleaseMode)
 	gin.SetMode(gin.DebugMode)
 	Router = gin.Default()
@@ -19,5 +21,7 @@ func CreateUrlMappings() {
 		v1.GET("/notices/:num", controllers.GetAllNotices)
 		v1.POST("/last/", controllers.GetLastNotice)
 		v1.POST("/today/", controllers.GetTodayNotices)
+		v1.POST("/ask/", controllers.AskCategory)
+		v1.POST("/ask/category", controllers.ShowCategory)
 	}
 }

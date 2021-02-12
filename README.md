@@ -33,3 +33,19 @@ $ [GIN-debug] POST   /v1/last/                 --> kakao/controllers.GetLastNoti
 ```console
 $ [GIN-debug] POST   /v1/today/                --> kakao/controllers.GetTodayNotices (4 handlers)
 ```
+
+## /v1/ask
+
+카테고리 선택 유도
+
+```console
+$ [GIN-debug] POST   /v1/ask/                  --> kakao/controllers.AskCategory (4 handlers)
+```
+
+## /v1/ask/category
+
+카테고리 선택에 따른 공지 5개 불러옴
+
+```console
+$ [GIN-debug] POST   /v1/ask/category          --> kakao/controllers.ShowCategory (4 handlers)
+```

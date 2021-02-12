@@ -3,22 +3,15 @@ package controllers
 import (
 	"fmt"
 	"kakao/models"
-	"net/http"
 	"strconv"
 	"time"
+	"unicode/utf8"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // it is a blank
 )
 
-func checkConnection() (ok bool) {
-	_, err := http.Get(models.AjouLink)
-	if err != nil {
-		return false
-	}
-	return true
-}
-
+// GetAllNotices :GET /notices/:num
 func GetAllNotices(c *gin.Context) {
 	quantity := c.Params.ByName("num")
 	num, _ := strconv.ParseInt(quantity, 10, 64)
@@ -34,13 +27,8 @@ func GetAllNotices(c *gin.Context) {
 	c.PureJSON(200, notices)
 }
 
+// GetLastNotice :POST /last
 func GetLastNotice(c *gin.Context) {
-	if err := checkConnection(); err != true {
-		errorMsg := models.SimpleText{Version: "2.0"}
-		errorMsg.Template.Outputs.SimpleText.Text = "인터넷 연결을 확인하세요."
-		c.JSON(404, errorMsg)
-		return
-	}
 	var notice models.Notice
 	// c.Bind(&notice)
 	if err := dbmap.SelectOne(&notice, models.PrintNotices, 1); err != nil {
@@ -52,15 +40,16 @@ func GetLastNotice(c *gin.Context) {
 	c.PureJSON(200, notice)
 }
 
+// GetTodayNotices :POST /today
 func GetTodayNotices(c *gin.Context) {
-	if err := checkConnection(); err != true {
+	if err := models.CheckConnection(); err != true {
 		errorMsg := models.SimpleText{Version: "2.0"}
 		errorMsg.Template.Outputs.SimpleText.Text = "인터넷 연결을 확인하세요."
 		c.JSON(404, errorMsg)
 		return
 	}
 
-	var notices []models.Notice = models.Parse(30)
+	var notices []models.Notice = models.Parse("", 30)
 	var label string
 
 	now := time.Now()
@@ -94,7 +83,11 @@ func GetTodayNotices(c *gin.Context) {
 		items = append(items, gin.H{"title": "공지가 없습니다!", "imageUrl": "http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg"})
 	} else {
 		for _, notice := range notices {
-			noticeJSON := gin.H{"title": notice.Title, "description": notice.Writer, "link": gin.H{"web": notice.Link}}
+			if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
+				notice.Title = string([]rune(notice.Title)[0:32]) + "..."
+			}
+			description := fmt.Sprintf("%v %v", notice.Writer, notice.Date[len(notice.Date)-5:])
+			noticeJSON := gin.H{"title": notice.Title, "description": description, "link": gin.H{"web": notice.Link}}
 			items = append(items, noticeJSON)
 		}
 	}

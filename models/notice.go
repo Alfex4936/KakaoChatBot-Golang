@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 	"log"
-	"os"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -23,8 +23,13 @@ type Notice struct {
 }
 
 // Parse is a function that parses a length of notices
-func Parse(length int) []Notice {
-	ajouHTML := fmt.Sprintf("%v?mode=list&articleLimit=%v&article.offset=0", AjouLink, length)
+func Parse(url string, length int) []Notice { // doesn't support default value for parameters
+	var ajouHTML string = url
+	if url == "" { // As default, use main link
+		ajouHTML = fmt.Sprintf("%v?mode=list&articleLimit=%v&article.offset=0", AjouLink, length)
+	} else {
+		ajouHTML = url
+	}
 
 	resp, err := soup.Get(ajouHTML)
 	if err != nil {
@@ -33,10 +38,11 @@ func Parse(length int) []Notice {
 	doc := soup.HTMLParse(resp)
 
 	notices := []Notice{}
+
 	ids := doc.FindAll("td", "class", "b-num-box")
 	if len(ids) == 0 {
 		fmt.Println("Check your parser.")
-		os.Exit(2)
+		return notices
 	}
 
 	titles := doc.FindAll("div", "class", "b-title-box")
@@ -49,9 +55,23 @@ func Parse(length int) []Notice {
 		link := titles[i].Find("a").Attrs()["href"]
 		date := strings.TrimSpace(dates[i].Text())
 		writer := writers[i].Text()
+
+		duplicate := "[" + writer + "]"
+		if strings.Contains(title, duplicate) {
+			writer = strings.TrimSpace(strings.Replace(writer, duplicate, "", 1))
+		}
+
 		notice := Notice{ID: id, Title: title, Date: date, Link: AjouLink + link, Writer: writer}
 		notices = append(notices, notice)
 	}
 
 	return notices
+}
+
+func CheckConnection() (ok bool) {
+	_, err := http.Get(AjouLink)
+	if err != nil {
+		return false
+	}
+	return true
 }
