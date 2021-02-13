@@ -33,12 +33,6 @@ func AskCategory(c *gin.Context) {
 
 // ShowCategory :POST /ask/category, MUST: "cate": 카테고리 이름
 func ShowCategory(c *gin.Context) {
-	// Check internet connection
-	if err := models.CheckConnection(); err == false {
-		c.JSON(404, models.BuildSimpleText("인터넷 연결을 확인하세요."))
-		return
-	}
-
 	// JSON request parse
 	var kjson models.KakaoJSON
 	if err := c.BindJSON(&kjson); err != nil {

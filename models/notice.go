@@ -1,10 +1,7 @@
 package models
 
 import (
-	"crypto/tls"
 	"fmt"
-	"log"
-	"net/http"
 	"strconv"
 	"strings"
 
@@ -28,21 +25,20 @@ func Parse(url string, length int) []Notice { // doesn't support default value f
 	var ajouHTML string = url
 	if url == "" { // As default, use main link
 		ajouHTML = fmt.Sprintf("%v?mode=list&articleLimit=%v&article.offset=0", AjouLink, length)
-	} else {
-		ajouHTML = url
 	}
-
-	resp, err := soup.Get(ajouHTML)
-	if err != nil {
-		log.Fatalln("Check your HTML connection.", err)
-	}
-	doc := soup.HTMLParse(resp)
 
 	notices := []Notice{}
 
+	resp, err := soup.Get(ajouHTML)
+	if err != nil {
+		fmt.Println("[Parser] Check your HTML connection.", err)
+		return notices
+	}
+	doc := soup.HTMLParse(resp)
+
 	ids := doc.FindAll("td", "class", "b-num-box")
 	if len(ids) == 0 {
-		fmt.Println("Check your parser.")
+		fmt.Println("[Parser] Check your parser.")
 		return notices
 	}
 
@@ -59,7 +55,7 @@ func Parse(url string, length int) []Notice { // doesn't support default value f
 
 		duplicate := "[" + writer + "]"
 		if strings.Contains(title, duplicate) {
-			writer = strings.TrimSpace(strings.Replace(writer, duplicate, "", 1))
+			title = strings.TrimSpace(strings.Replace(title, duplicate, "", 1))
 		}
 
 		notice := Notice{ID: id, Title: title, Date: date, Link: AjouLink + link, Writer: writer}
@@ -69,11 +65,18 @@ func Parse(url string, length int) []Notice { // doesn't support default value f
 	return notices
 }
 
-func CheckConnection() (ok bool) {
-	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	_, err := http.Get(AjouLink)
-	if err == nil {
-		return true
-	}
-	return false
+// func CheckConnection() (ok bool) {
+// 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+// 	_, err := http.Get(AjouLink)
+// 	if err == nil {
+// 		return true
+// 	}
+// 	return false
+// }
+
+/* 어차피 인터넷 연결이 없으면 카톡이 전송 안됨.
+if err := models.CheckConnection(); err == false {
+	c.JSON(404, models.BuildSimpleText("인터넷 연결 확인 후 잠시 후 다시 시도해보세요."))
+	return
 }
+*/

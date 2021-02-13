@@ -33,5 +33,6 @@ func CreateURLMappings() {
 		v1.POST("/ask", controllers.AskCategory)
 		v1.POST("/ask/category", controllers.ShowCategory)
 		v1.POST("/schedule", controllers.GetSchedule)
+		v1.POST("/search", controllers.SearchKeyword)
 	}
 }

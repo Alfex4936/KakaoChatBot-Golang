@@ -1,15 +1,19 @@
 package models
 
+type H map[string]interface{}
+
 // SimpleText for Kakao Response
 type SimpleText struct {
 	Template struct {
-		Outputs struct {
-			SimpleText struct {
-				Text string `json:"text"`
-			} `json:"simpleText"`
+		Outputs []struct {
+			SimpleText Text `json:"simpleText"`
 		} `json:"outputs"`
 	} `json:"template"`
 	Version string `json:"version"`
+}
+
+type Text struct {
+	Text string `json:"text"`
 }
 
 // KakaoJSON request main
@@ -63,6 +67,22 @@ type KakaoJSON struct {
 // BuildSimpleText ...
 func BuildSimpleText(msg string) SimpleText {
 	stext := SimpleText{Version: "2.0"}
-	stext.Template.Outputs.SimpleText.Text = msg
+
+	var temp []struct {
+		SimpleText Text `json:"simpleText"`
+	}
+	simpleText := Text{Text: msg}
+
+	text := struct {
+		SimpleText Text `json:"simpleText"`
+	}{SimpleText: simpleText}
+
+	temp = append(temp, text)
+
+	stext.Template.Outputs = temp
 	return stext
+}
+
+func BuildQuickReply(msg, label string) H {
+	return H{"messageText": msg, "aciton": "message", "label": label}
 }
