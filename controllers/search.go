@@ -11,7 +11,7 @@ import (
 	_ "github.com/go-sql-driver/mysql" // it is a blank
 )
 
-// SearchKeyword :POST /serach, MUST: "cate": 카테고리 이름
+// SearchKeyword :POST /search, MUST: "cate": 카테고리 이름
 func SearchKeyword(c *gin.Context) {
 	// JSON request parse
 	var kjson models.KakaoJSON
