@@ -9,7 +9,7 @@
 num만큼 MySQL DB에서 공지를 불러옴
 
 ```console
-$ [GIN-debug] GET    /v1/notices/:num          --> kakao/controllers.GetAllNotices (4 handlers)
+$ [GIN-debug] GET    /v1/notices/:num          --> kakao/controllers.GetAllNotices (2 handlers)
 ```
 
 ```console
@@ -23,7 +23,7 @@ $ [GIN] 2021/02/11 - 22:46:32 | 200 |     29.9501ms |             ::1 | GET     
 MySQL DB에서 가장 마지막 공지를 불러옴
 
 ```console
-$ [GIN-debug] POST   /v1/last/                 --> kakao/controllers.GetLastNotice (4 handlers)
+$ [GIN-debug] POST   /v1/last/                 --> kakao/controllers.GetLastNotice (2 handlers)
 ```
 
 ## /v1/today
@@ -31,7 +31,7 @@ $ [GIN-debug] POST   /v1/last/                 --> kakao/controllers.GetLastNoti
 오늘 공지를 불러옴
 
 ```console
-$ [GIN-debug] POST   /v1/today/                --> kakao/controllers.GetTodayNotices (4 handlers)
+$ [GIN-debug] POST   /v1/today/                --> kakao/controllers.GetTodayNotices (2 handlers)
 ```
 
 ## /v1/ask
@@ -39,7 +39,7 @@ $ [GIN-debug] POST   /v1/today/                --> kakao/controllers.GetTodayNot
 카테고리 선택 유도
 
 ```console
-$ [GIN-debug] POST   /v1/ask/                  --> kakao/controllers.AskCategory (4 handlers)
+$ [GIN-debug] POST   /v1/ask/                  --> kakao/controllers.AskCategory (2 handlers)
 ```
 
 ## /v1/ask/category
@@ -47,5 +47,21 @@ $ [GIN-debug] POST   /v1/ask/                  --> kakao/controllers.AskCategory
 카테고리 선택에 따른 공지 5개 불러옴
 
 ```console
-$ [GIN-debug] POST   /v1/ask/category          --> kakao/controllers.ShowCategory (4 handlers)
+$ [GIN-debug] POST   /v1/ask/category          --> kakao/controllers.ShowCategory (2 handlers)
+```
+
+## /v1/schedule
+
+AWS RDS MySQL에서 저장해둔 학사 일정을 불러옴
+
+```console
+[GIN-debug] POST   /v1/schedule              --> kakao/controllers.GetSchedule (2 handlers)
+```
+
+## /v1/search
+
+원하는 키워드 공지를 검색해서 불러옴
+
+```console
+$ [GIN-debug] POST   /v1/search          --> kakao/controllers.SearchKeyword (2 handlers)
 ```
