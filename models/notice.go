@@ -46,7 +46,7 @@ func Parse(url string, length int) []Notice { // doesn't support default value f
 	dates := doc.FindAll("span", "class", "b-date")
 	//links := doc.FindAll("div", "class", "b-title-box")
 	writers := doc.FindAll("span", "class", "b-writer")
-	for i := 0; i < length; i++ {
+	for i := 0; i < len(ids); i++ {
 		id, _ := strconv.ParseInt(strings.TrimSpace(ids[i].Text()), 10, 64)
 		title := strings.TrimSpace(titles[i].Find("a").Text())
 		link := titles[i].Find("a").Attrs()["href"]

@@ -16,7 +16,7 @@ func SearchKeyword(c *gin.Context) {
 	// JSON request parse
 	var kjson models.KakaoJSON
 	if err := c.BindJSON(&kjson); err != nil {
-		c.JSON(200, models.BuildSimpleText(err.Error())) // http.StatusBadRequest
+		c.AbortWithStatusJSON(200, models.BuildSimpleText(err.Error())) // http.StatusBadRequest
 		return
 	}
 
@@ -27,18 +27,19 @@ func SearchKeyword(c *gin.Context) {
 		template := gin.H{"outputs": []gin.H{{"simpleText": gin.H{"text": "2021 검색과 같이 검색어를 같이 입력하세요."}}}}
 		template["quickReplies"] = []gin.H{gin.H(models.BuildQuickReply("2021 검색", "2021 검색"))} // Optional
 		simpleText := gin.H{"version": "2.0", "template": template}
-		c.JSON(400, simpleText)
+		c.AbortWithStatusJSON(200, simpleText)
 		return
 	}
-	keyword := userKeyword["sys_text"].(string)
-	url := fmt.Sprintf("%v?mode=list&srSearchKey=&srSearchVal=%v&articleLimit=7&article.offset=0", models.AjouLink, url.QueryEscape(strings.TrimSpace(keyword)))
+	keyword := strings.TrimSpace(userKeyword["sys_text"].(string))
+	url := fmt.Sprintf("%v?mode=list&srSearchKey=&srSearchVal=%v&articleLimit=7&article.offset=0", models.AjouLink, url.QueryEscape(keyword))
 
 	var notices []models.Notice = models.Parse(url, 7)
 	var replies []gin.H
 	var label string
 
 	if len(notices) == 0 {
-		c.JSON(400, models.BuildSimpleText(fmt.Sprintf("%v에 관한 글이 없어요.", keyword)))
+		// c.AbortWithStatusJSON(200, gin.H{"version": "2.0", "template": gin.H{"outputs": []gin.H{{"simpleText": gin.H{"text": "YOO"}}}}})
+		c.AbortWithStatusJSON(200, models.BuildSimpleText(fmt.Sprintf("%v에 관한 글이 없어요.", keyword)))
 		return
 	}
 	// Card
@@ -75,5 +76,5 @@ func SearchKeyword(c *gin.Context) {
 	template["quickReplies"] = replies // Optional
 	listCard := gin.H{"version": "2.0", "template": template}
 
-	c.PureJSON(200, listCard)
+	c.JSON(200, listCard)
 }

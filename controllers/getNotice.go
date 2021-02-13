@@ -18,7 +18,7 @@ func GetAllNotices(c *gin.Context) {
 
 	var notices []models.Notice
 	if _, err := dbmap.Select(&notices, models.PrintNotices, num); err != nil {
-		c.JSON(404, models.BuildSimpleText(err.Error()))
+		c.AbortWithStatusJSON(200, models.BuildSimpleText(err.Error()))
 		return
 	}
 
@@ -132,7 +132,7 @@ func GetYesterdayNotices(c *gin.Context) {
 	var label string
 
 	if _, err := dbmap.Select(&notices, models.GetNoticesByDate, yesterdayStr); err != nil {
-		c.JSON(404, models.BuildSimpleText(err.Error()))
+		c.AbortWithStatusJSON(200, models.BuildSimpleText(err.Error()))
 		return
 	}
 

@@ -12,6 +12,7 @@ type SimpleText struct {
 	Version string `json:"version"`
 }
 
+// Text for SimpleText
 type Text struct {
 	Text string `json:"text"`
 }
@@ -65,8 +66,8 @@ type KakaoJSON struct {
 }
 
 // BuildSimpleText ...
-func BuildSimpleText(msg string) SimpleText {
-	stext := SimpleText{Version: "2.0"}
+func BuildSimpleText(msg string) *SimpleText {
+	stext := &SimpleText{Version: "2.0"}
 
 	var temp []struct {
 		SimpleText Text `json:"simpleText"`

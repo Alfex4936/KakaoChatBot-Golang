@@ -19,7 +19,7 @@ func GetSchedule(c *gin.Context) {
 	var length int = len(models.CardImages)
 
 	if _, err := dbmap.Select(&schedules, models.LoadSchedule); err != nil {
-		c.JSON(404, models.BuildSimpleText(err.Error()))
+		c.AbortWithStatusJSON(200, models.BuildSimpleText(err.Error()))
 		return
 	}
 

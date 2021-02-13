@@ -7,6 +7,11 @@ import (
 	cors "github.com/itsjamie/gin-cors"
 )
 
+// Welcome message to check if server is running well.
+func Welcome(c *gin.Context) {
+	c.JSON(200, gin.H{"welcome": "server is running well."})
+}
+
 // Router ...
 var Router *gin.Engine
 
@@ -26,6 +31,7 @@ func CreateURLMappings() {
 	// Router.Use(controllers.Cors())
 	v1 := Router.Group("/v1")
 	{
+		v1.GET("/", Welcome)
 		v1.GET("/notices/:num", controllers.GetAllNotices)
 		v1.POST("/last", controllers.GetLastNotice)
 		v1.POST("/today", controllers.GetTodayNotices)

@@ -20,7 +20,7 @@ func AskCategory(c *gin.Context) {
 
 	var replies []gin.H
 	for _, cate := range categories {
-		replies = append(replies, gin.H{"messageText": cate, "aciton": "message", "label": cate})
+		replies = append(replies, gin.H{"messageText": cate, "action": "message", "label": cate})
 	}
 
 	// Make a template
@@ -36,7 +36,7 @@ func ShowCategory(c *gin.Context) {
 	// JSON request parse
 	var kjson models.KakaoJSON
 	if err := c.BindJSON(&kjson); err != nil {
-		c.JSON(200, models.BuildSimpleText(err.Error())) // http.StatusBadRequest
+		c.AbortWithStatusJSON(200, models.BuildSimpleText(err.Error())) // http.StatusBadRequest
 		return
 	}
 
@@ -61,7 +61,7 @@ func ShowCategory(c *gin.Context) {
 
 	var notices []models.Notice = models.Parse(url, 5)
 	if len(notices) == 0 {
-		c.JSON(404, models.BuildSimpleText("아주대학교 홈페이지 서버 반응이 늦고 있네요. 잠시 후 다시 시도해보세요."))
+		c.AbortWithStatusJSON(200, models.BuildSimpleText("아주대학교 홈페이지 서버 반응이 늦고 있네요. 잠시 후 다시 시도해보세요."))
 		return
 	}
 
