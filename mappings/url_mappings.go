@@ -40,5 +40,7 @@ func CreateURLMappings() {
 		v1.POST("/ask/category", controllers.ShowCategory)
 		v1.POST("/schedule", controllers.GetSchedule)
 		v1.POST("/search", controllers.SearchKeyword)
+		// Infomation
+		v1.POST("/info/weather", controllers.AskWeather)
 	}
 }
