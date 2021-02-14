@@ -113,7 +113,7 @@ type KakaoJSON struct {
 
 INFO:     server - "POST /search HTTP/1.1" 200 OK
 
-```json
+```yaml
 {
     "action": {
         "clientExtra": {},
