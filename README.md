@@ -238,7 +238,7 @@ TO-DO: Selenium을 통한 자동 db 업데이트
 </p>
 </div>
 
-## [아주대 지역 날씨 보기]
+## [아주대 지역 날씨 보기](https://github.com/Alfex4936/KakaoChatBot-Golang/blob/main/controllers/infomation.go#L26)
 
 (수원 영통구 날씨를 weather.naver.com에서 불러옴)
 
@@ -249,6 +249,6 @@ TO-DO: 더 나은 메시지 포맷 찾기
 
 <div align="center">
 <p>
-    <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/weather.png">
+    <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/weather.jpg">
 </p>
 </div>
