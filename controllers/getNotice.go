@@ -92,6 +92,7 @@ func GetTodayNotices(c *gin.Context) {
 
 	if len(notices) > 5 {
 		label = fmt.Sprintf("%v개 더보기", len(notices)-5)
+		notices = notices[:5]
 	} else {
 		label = "아주대학교 공지"
 	}
@@ -149,6 +150,7 @@ func GetYesterdayNotices(c *gin.Context) {
 
 	if len(notices) > 5 {
 		label = fmt.Sprintf("%v개 더보기", len(notices)-5)
+		notices = notices[:5]
 	} else {
 		label = "아주대학교 공지"
 	}

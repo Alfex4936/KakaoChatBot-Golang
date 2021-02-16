@@ -41,7 +41,7 @@ ubuntu:~$ aws s3 sync s3://bucket/kakao_server kakao_server
 ubuntu:~/kakao_server$ go run main.go
 ```
 
-## 특징
+## 기능
 * [오늘/어제 공지 불러오기](https://github.com/Alfex4936/kakaoChatbot-Golang#%EC%98%A4%EB%8A%98%EC%96%B4%EC%A0%9C-%EA%B3%B5%EC%A7%80-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0) (ListCard 최대 한계 5개)
 * [어제 공지](https://github.com/Alfex4936/kakaoChatbot-Golang#%EC%98%A4%EB%8A%98%EC%96%B4%EC%A0%9C-%EA%B3%B5%EC%A7%80-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0)는 MySQL DB를 통해 불러온다.
 * [마지막 공지 1개](https://github.com/Alfex4936/kakaoChatbot-Golang#%EB%A7%88%EC%A7%80%EB%A7%89-%EA%B3%B5%EC%A7%80-1%EA%B0%9C-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0) 불러오기 ("마지막 공지 알려줘")
