@@ -11,6 +11,7 @@ import (
 )
 
 // AskCategory :POST /ask, MUST: "cate": 카테고리 이름
+// 메시지 종류: SimpleText
 func AskCategory(c *gin.Context) {
 	categories := []string{"학사", "학사일정", "비교과",
 		"장학", "취업", "사무",
@@ -32,6 +33,7 @@ func AskCategory(c *gin.Context) {
 }
 
 // ShowCategory :POST /ask/category, MUST: "cate": 카테고리 이름
+// 메시지 종류: SimpleText | ListCard
 func ShowCategory(c *gin.Context) {
 	// JSON request parse
 	var kjson models.KakaoJSON

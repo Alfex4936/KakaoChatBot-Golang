@@ -2,6 +2,21 @@ package models
 
 type H map[string]interface{}
 
+// Make a basicCard
+// template := gin.H{"outputs": []gin.H{{
+// 	"basicCard": gin.H{
+// 		"buttons":   []gin.H{{"action": "webLink", "label": "날씨 홈페이지 열기", "webLinkUrl": models.NaverWeather}},
+// 		"thumbnail": gin.H{"imageUrl": ""},
+// 		"title":     fmt.Sprintf("현재 수원 영통구 날씨: %s", weather.CurrentTemp),
+// 		"description": fmt.Sprintf("(해)<br>현재 %s<br>최저, 최고 온도: %s, %s<br>낮, 밤 강수 확률: %s, %s<br>미세먼지: %s<br>초미세먼지: %s<br>자외선: %s",
+// 			weather.CurrentStatus,
+// 			weather.MinTemp, weather.MaxTemp,
+// 			weather.RainDay, weather.RainNight,
+// 			weather.FineDust, weather.UltraDust, weather.UV),
+// 	},
+// }}}
+// basicCard := gin.H{"version": "2.0", "template": template}
+
 // SimpleText for Kakao Response
 type SimpleText struct {
 	Template struct {

@@ -26,6 +26,7 @@ func GetAllNotices(c *gin.Context) {
 }
 
 // GetLastNotice :POST /last
+// 메시지 종류: SimpleText | ListCard
 func GetLastNotice(c *gin.Context) {
 	// if err := dbmap.SelectOne(&notice, models.PrintNotices, 1); err != nil {
 	// 	c.JSON(404, models.BuildSimpleText(err.Error()))
@@ -64,6 +65,7 @@ func GetLastNotice(c *gin.Context) {
 }
 
 // GetTodayNotices :POST /today
+// 메시지 종류: SimpleText | ListCard
 func GetTodayNotices(c *gin.Context) {
 	var notices []models.Notice = models.Parse("", 30)
 	var label string
@@ -124,6 +126,7 @@ func GetTodayNotices(c *gin.Context) {
 }
 
 // GetYesterdayNotices :POST /today
+// 메시지 종류: SimpleText | ListCard
 func GetYesterdayNotices(c *gin.Context) {
 	yesterday := time.Now().Add(-24 * time.Hour)
 	yesterdayStr := fmt.Sprintf("%v.%02v.%v", yesterday.Year()%100, int(yesterday.Month()), yesterday.Day())
