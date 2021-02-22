@@ -1,6 +1,11 @@
+.PHONY:
+
+go:
+	go run main/main.go
+
 build:
 	go build -ldflags="-w -s" -o bin/main main/main.go
-	@echo "Upxing..."
+	@echo Upxing...
 	upx bin/main
 
 run:
@@ -25,22 +30,37 @@ else
 	@echo "$(OS): Compiling for every OS and Platform"
 # 32-Bit Systems
 # FreeBDS
-	GOOS=freebsd GOARCH=386 go build -o bin/main-freebsd-386 main.go
+	GOOS=freebsd GOARCH=386 go build -o bin/main-freebsd-386 main/main.go
 # MacOS
-	GOOS=darwin GOARCH=386 go build -o bin/main-darwin-386 main.go
+#	GOOS=darwin GOARCH=386 go build -o bin/main-darwin-386 main/main.go
 # Linux
-	GOOS=linux GOARCH=386 go build -o bin/main-linux-386 main.go
+	GOOS=linux GOARCH=386 go build -o bin/main-linux-386 main/main.go
 # Windows
-	GOOS=windows GOARCH=386 go build -o bin/main-windows-386.exe main.go
+	GOOS=windows GOARCH=386 go build -o bin/main-windows-386.exe main/main.go
 # 64-Bit
 # FreeBDS
-	GOOS=freebsd GOARCH=amd64 go build -o bin/main-freebsd-amd64 main.go
+	GOOS=freebsd GOARCH=amd64 go build -o bin/main-freebsd-amd64 main/main.go
 # MacOS
-	GOOS=darwin GOARCH=amd64 go build -o bin/main-darwin-amd64 main.go
+	GOOS=darwin GOARCH=amd64 go build -o bin/main-darwin-amd64 main/main.go
 # Linux
-	GOOS=linux GOARCH=amd64 go build -o bin/main-linux-amd64 main.go
+	GOOS=linux GOARCH=amd64 go build -o bin/main-linux-amd64 main/main.go
 # Windows
-	set GOOS=windows& set GOARCH=amd64& go build -o bin/main-windows-amd64.exe main.go
+	GOOS=windows set GOARCH=amd64 go build -o bin/main-windows-amd64.exe main/main.go
 endif
+
+optimize:
+	set CGO_ENABLED=0& set GOOS=windows& set GOARCH=amd64& go build -a -ldflags="-w -s" -o bin/main.exe main/main.go
+
+docker-build:
+	docker build -t kkt .
+
+docker-start:
+	docker start kakao
+
+docker-id:
+	@docker ps -q --filter ancestor=kkt
+
+docker-stop:
+	@docker stop kakao
 
 all: build run
