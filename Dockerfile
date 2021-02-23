@@ -1,7 +1,7 @@
 # To use git command for golang-mysql-driver
-FROM ubuntu:latest
-RUN apt-get -y update
-RUN apt-get -y install git
+# FROM ubuntu:latest
+# RUN apt-get -y update
+# RUN apt-get -y install git
 
 ### Builder
 FROM golang:1.16.0-alpine as builder
@@ -9,17 +9,23 @@ FROM golang:1.16.0-alpine as builder
 
 WORKDIR $GOPATH/src/chatbot
 
+# golang-mysql-driver requires git command
+RUN set -ex && apk add --no-cache --virtual git
+
 ADD . .
 
 # Install all dependencies
 RUN go get -d -v ./...
 
+# where modules save /go/pkg/mod/github.com/
+COPY soup.go /go/pkg/mod/github.com/anaskhan96/soup@v1.2.4
+
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-w -s' -o /bin/chatbot main/main.go
 
 RUN chmod +x /bin/chatbot
 
-ENV GO_MYSQL=ID:PASSWD@tcp(RDS_SERVER)/notices
-ENV GO111MODULE="auto"
+ENV GO_MYSQL "ID:PASSWD@tcp(RDS_SERVER)/notices"
+ENV GO111MODULE "auto"
 EXPOSE 8008
 
 ### Make executable image
