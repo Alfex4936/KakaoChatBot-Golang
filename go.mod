@@ -3,7 +3,7 @@ module chatbot
 go 1.15
 
 require (
-	github.com/Alfex4936/kakao v1.0.2
+	github.com/Alfex4936/kakao v1.0.4
 	github.com/anaskhan96/soup v1.2.4
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-gorp/gorp v2.2.0+incompatible

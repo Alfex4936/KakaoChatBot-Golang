@@ -1,7 +1,7 @@
 package mappings
 
 import (
-	"kakao/controllers"
+	"chatbot/controllers"
 
 	"github.com/gin-gonic/gin"
 	cors "github.com/itsjamie/gin-cors"

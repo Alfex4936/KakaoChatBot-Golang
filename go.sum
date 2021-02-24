@@ -1,6 +1,8 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/Alfex4936/kakao v1.0.2 h1:xUpEAyHrJVAhiabWCMoRGkW0EZuF8olzf2XfcrZIenE=
 github.com/Alfex4936/kakao v1.0.2/go.mod h1:0yYAnTiTNm8uEk0xDF089EAeIhi3KbYgcWbF6CiZo+M=
+github.com/Alfex4936/kakao v1.0.4 h1:XkvXErD6f4pyQFpOfQkKccTT5uSYR6p6NHUHu57Xg3U=
+github.com/Alfex4936/kakao v1.0.4/go.mod h1:0yYAnTiTNm8uEk0xDF089EAeIhi3KbYgcWbF6CiZo+M=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/a8m/expect v1.0.0/go.mod h1:4IwSCMumY49ScypDnjNbYEjgVeqy1/U2cEs3Lat96eA=

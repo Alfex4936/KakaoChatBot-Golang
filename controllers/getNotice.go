@@ -1,24 +1,24 @@
 package controllers
 
 import (
+	"chatbot/models"
 	"fmt"
-	"kakao/models"
 	"strconv"
 	"time"
 	"unicode/utf8"
 
+	k "github.com/Alfex4936/kakao"
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql" // it is a blank
 )
 
-// GetAllNotices :GET /notices/:num
+// GetAllNotices from my db :GET /notices/:num
 func GetAllNotices(c *gin.Context) {
 	quantity := c.Params.ByName("num")
 	num, _ := strconv.ParseInt(quantity, 10, 64)
 
 	var notices []models.Notice
 	if _, err := dbmap.Select(&notices, models.PrintNotices, num); err != nil {
-		c.AbortWithStatusJSON(200, models.BuildSimpleText(err.Error()))
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build(err.Error(), nil))
 		return
 	}
 
@@ -34,34 +34,21 @@ func GetLastNotice(c *gin.Context) {
 	// }
 	var notice models.Notice = models.Parse("", 1)[0]
 
-	// Card
-	items := []gin.H{}
-	buttons := []gin.H{}
-	header := gin.H{"title": fmt.Sprintf("%v 공지", notice.Date)}
+	// ListCard
+	listCard := k.ListCard{}.New(false)
+	listCard.Title = fmt.Sprintf("%v 공지", notice.Date)
 
 	// Add button
-	buttons = append(buttons, gin.H{"label": "공유하기", "action": "share"})
+	listCard.Buttons.Add(k.ShareButton{}.New("공유하기"))
 
 	if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
 		notice.Title = string([]rune(notice.Title)[0:32]) + "..."
 	}
 	description := fmt.Sprintf("%v %v", notice.Writer, notice.Date[len(notice.Date)-5:])
-	noticeJSON := gin.H{"title": notice.Title, "description": description, "link": gin.H{"web": notice.Link}}
-	items = append(items, noticeJSON)
 
-	// QuickReplies [Optional]
-	// quickReplies := []gin.H{}
+	listCard.Items.Add(k.ListItemLink{}.New(notice.Title, description, "", notice.Link))
 
-	// Add Two quick replies
-	// quickReply1 := gin.H{"messageText": "오늘 공지 보여줘", "action": "message", "label": "오늘"}
-	// quickReply2 := gin.H{"messageText": "어제 공지 보여줘", "action": "message", "label": "어제"}
-	// quickReplies = append(quickReplies, quickReply1, quickReply2)
-
-	// Make a template
-	template := gin.H{"outputs": []gin.H{{"listCard": gin.H{"header": header, "items": items, "buttons": buttons}}}}
-	// template["quickReplies"] = quickReplies // Optional
-	listCard := gin.H{"version": "2.0", "template": template}
-	c.PureJSON(200, listCard)
+	c.PureJSON(200, listCard.Build())
 }
 
 // GetTodayNotices :POST /today
@@ -82,13 +69,12 @@ func GetTodayNotices(c *gin.Context) {
 		}
 	}
 
-	// Card
-	items := []gin.H{}
-	buttons := []gin.H{}
-	header := gin.H{"title": fmt.Sprintf("%v) 오늘 공지", nowStr)}
+	// ListCard + QuickReplies
+	listCard := k.ListCard{}.New(true)
+	listCard.Title = fmt.Sprintf("%v) 오늘 공지", nowStr)
 
 	// Add buttons
-	buttons = append(buttons, gin.H{"label": "공유하기", "action": "share"})
+	listCard.Buttons.Add(k.ShareButton{}.New("공유하기"))
 
 	if len(notices) > 5 {
 		label = fmt.Sprintf("%v개 더보기", len(notices)-5)
@@ -96,34 +82,26 @@ func GetTodayNotices(c *gin.Context) {
 	} else {
 		label = "아주대학교 공지"
 	}
-	buttons = append(buttons, gin.H{"label": label, "action": "webLink", "webLinkUrl": models.AjouLink})
+	listCard.Buttons.Add(k.LinkButton{}.New(label, models.AjouLink))
 
 	if len(notices) == 0 {
-		items = append(items, gin.H{"title": "공지가 없습니다!", "imageUrl": "http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg"})
+		listCard.Items.Add(k.ListItem{}.New("공지가 없습니다!", "", "http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg"))
 	} else {
 		for _, notice := range notices {
 			if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
 				notice.Title = string([]rune(notice.Title)[0:32]) + "..."
 			}
 			description := fmt.Sprintf("%v %v", notice.Writer, notice.Date[len(notice.Date)-5:])
-			noticeJSON := gin.H{"title": notice.Title, "description": description, "link": gin.H{"web": notice.Link}}
-			items = append(items, noticeJSON)
+
+			listCard.Items.Add(k.ListItemLink{}.New(notice.Title, description, "", notice.Link))
 		}
 	}
 
-	// QuickReplies [Optional]
-	quickReplies := []gin.H{}
-
 	// Add Two quick replies
-	quickReply1 := gin.H{"messageText": "오늘 공지 보여줘", "action": "message", "label": "오늘"}
-	quickReply2 := gin.H{"messageText": "어제 공지 보여줘", "action": "message", "label": "어제"}
-	quickReplies = append(quickReplies, quickReply1, quickReply2)
+	listCard.QuickReplies.Add(k.QuickReply{}.New("오늘", "오늘 공지 보여줘"))
+	listCard.QuickReplies.Add(k.QuickReply{}.New("어제", "어제 공지 보여줘"))
 
-	// Make a template
-	template := gin.H{"outputs": []gin.H{{"listCard": gin.H{"header": header, "items": items, "buttons": buttons}}}}
-	template["quickReplies"] = quickReplies // Optional
-	listCard := gin.H{"version": "2.0", "template": template}
-	c.PureJSON(200, listCard)
+	c.PureJSON(200, listCard.Build())
 }
 
 // GetYesterdayNotices :POST /today
@@ -136,17 +114,16 @@ func GetYesterdayNotices(c *gin.Context) {
 	var label string
 
 	if _, err := dbmap.Select(&notices, models.GetNoticesByDate, yesterdayStr); err != nil {
-		c.AbortWithStatusJSON(200, models.BuildSimpleText(err.Error()))
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build(err.Error(), nil))
 		return
 	}
 
-	// Card
-	items := []gin.H{}
-	buttons := []gin.H{}
-	header := gin.H{"title": fmt.Sprintf("%v) 어제 공지", yesterdayStr)}
+	// ListCard + QuickReplies
+	listCard := k.ListCard{}.New(true)
+	listCard.Title = fmt.Sprintf("%v) 어제 공지", yesterdayStr)
 
 	// Add buttons
-	buttons = append(buttons, gin.H{"label": "공유하기", "action": "share"})
+	listCard.Buttons.Add(k.ShareButton{}.New("공유하기"))
 
 	if len(notices) > 5 {
 		label = fmt.Sprintf("%v개 더보기", len(notices)-5)
@@ -154,33 +131,25 @@ func GetYesterdayNotices(c *gin.Context) {
 	} else {
 		label = "아주대학교 공지"
 	}
-	buttons = append(buttons, gin.H{"label": label, "action": "webLink", "webLinkUrl": models.AjouLink})
+	listCard.Buttons.Add(k.LinkButton{}.New(label, models.AjouLink))
 
 	// Python MakeJSON
 	if len(notices) == 0 {
-		items = append(items, gin.H{"title": "공지가 없습니다!", "imageUrl": "http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg"})
+		listCard.Items.Add(k.ListItem{}.New("공지가 없습니다!", "", "http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg"))
 	} else {
 		for _, notice := range notices {
 			if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
 				notice.Title = string([]rune(notice.Title)[0:32]) + "..."
 			}
 			description := fmt.Sprintf("%v %v", notice.Writer, notice.Date[len(notice.Date)-5:])
-			noticeJSON := gin.H{"title": notice.Title, "description": description, "link": gin.H{"web": notice.Link}}
-			items = append(items, noticeJSON)
+
+			listCard.Items.Add(k.ListItemLink{}.New(notice.Title, description, "", notice.Link))
 		}
 	}
 
-	// QuickReplies [Optional]
-	quickReplies := []gin.H{}
-
 	// Add Two quick replies
-	quickReply1 := gin.H{"messageText": "오늘 공지 보여줘", "action": "message", "label": "오늘"}
-	quickReply2 := gin.H{"messageText": "어제 공지 보여줘", "action": "message", "label": "어제"}
-	quickReplies = append(quickReplies, quickReply1, quickReply2)
+	listCard.QuickReplies.Add(k.QuickReply{}.New("오늘", "오늘 공지 보여줘"))
+	listCard.QuickReplies.Add(k.QuickReply{}.New("어제", "어제 공지 보여줘"))
 
-	// Make a template
-	template := gin.H{"outputs": []gin.H{{"listCard": gin.H{"header": header, "items": items, "buttons": buttons}}}}
-	template["quickReplies"] = quickReplies // Optional
-	listCard := gin.H{"version": "2.0", "template": template}
-	c.PureJSON(200, listCard)
+	c.PureJSON(200, listCard.Build())
 }

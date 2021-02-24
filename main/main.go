@@ -1,7 +1,7 @@
 package main
 
 import (
-	"kakao/mappings"
+	"chatbot/mappings"
 
 	_ "github.com/go-sql-driver/mysql"
 )

@@ -1,37 +1,36 @@
 package controllers
 
 import (
+	"chatbot/models"
 	"fmt"
-	"kakao/models"
 	"math/rand"
 	"time"
 
+	k "github.com/Alfex4936/kakao"
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql" // it is a blank
 )
 
 // GetSchedule :POST /schedule, MUST: "cate": 카테고리 이름
+// Carousel
 func GetSchedule(c *gin.Context) {
 	rand.Seed(time.Now().Unix()) // To pick a image for carousel card randomly
 
 	var schedules []models.Schedule
-	var cards []gin.H
 	var length int = len(models.CardImages)
+	carousel := k.Carousel{}.New(false, false)
 
 	if _, err := dbmap.Select(&schedules, models.LoadSchedule); err != nil {
-		c.AbortWithStatusJSON(200, models.BuildSimpleText(err.Error()))
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build(err.Error(), nil))
 		return
 	}
 
 	for _, schedule := range schedules {
-		carousel := gin.H{"title": schedule.Content, "description": fmt.Sprintf("%v ~ %v", schedule.StartDate, schedule.EndDate),
-			"thumbnail": gin.H{"imageUrl": fmt.Sprintf("https://raw.githubusercontent.com/Alfex4936/kakaoChatbot-Ajou/main/imgs/%v.png", models.CardImages[rand.Int()%length])},
-		}
-		cards = append(cards, carousel)
+		card := k.BasicCard{}.New(false, false)
+		card.Title = schedule.Content
+		card.Desc = fmt.Sprintf("%v ~ %v", schedule.StartDate, schedule.EndDate)
+		card.ThumbNail = k.ThumbNail{}.New(fmt.Sprintf("https://raw.githubusercontent.com/Alfex4936/kakaoChatbot-Ajou/main/imgs/%v.png", models.CardImages[rand.Int()%length]))
+		carousel.Cards.Add(card)
 	}
 
-	template := gin.H{"outputs": []gin.H{{"carousel": gin.H{"type": "basicCard", "items": cards}}}}
-	carouselCard := gin.H{"version": "2.0", "template": template}
-
-	c.PureJSON(200, carouselCard)
+	c.PureJSON(200, carousel.Build())
 }

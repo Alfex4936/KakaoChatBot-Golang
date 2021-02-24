@@ -54,6 +54,9 @@ optimize:
 docker-build:
 	docker build -t kkt .
 
+docker-run:
+	docker run --name=kakao -p 8008:8008 kkt
+
 docker-start:
 	docker start kakao
 
