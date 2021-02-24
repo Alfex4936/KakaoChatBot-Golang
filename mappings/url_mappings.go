@@ -2,7 +2,10 @@ package mappings
 
 import (
 	"chatbot/controllers"
+	"time"
 
+	"github.com/didip/tollbooth"
+	"github.com/didip/tollbooth/limiter"
 	"github.com/gin-gonic/gin"
 	cors "github.com/itsjamie/gin-cors"
 )
@@ -10,6 +13,19 @@ import (
 // Welcome message to check if server is running well.
 func Welcome(c *gin.Context) {
 	c.JSON(200, gin.H{"welcome": "server is running well."})
+}
+
+// LimitHandler blocks too many requests at once.
+func LimitHandler(lmt *limiter.Limiter) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		httpError := tollbooth.LimitByRequest(lmt, c.Writer, c.Request)
+		if httpError != nil {
+			c.Data(httpError.StatusCode, lmt.GetMessageContentType(), []byte(httpError.Message))
+			c.Abort()
+		} else {
+			c.Next()
+		}
+	}
 }
 
 // Router ...
@@ -20,6 +36,14 @@ func CreateURLMappings() {
 	// gin.SetMode(gin.ReleaseMode)
 	gin.SetMode(gin.DebugMode)
 	Router = gin.New()
+
+	// Create a limiter struct.
+	// Allow only 1 request per 1 second
+	limiter := tollbooth.NewLimiter(1, &limiter.ExpirableOptions{DefaultExpirationTTL: time.Hour})
+	limiter.SetMethods([]string{"GET", "POST"})
+
+	Router.Use(LimitHandler(limiter))
+
 	// Apply the middleware to the router (works with groups too)
 	Router.Use(cors.Middleware(cors.Config{
 		Origins:        "*",
