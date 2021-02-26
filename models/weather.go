@@ -42,7 +42,7 @@ func GetWeather() (Weather, error) {
 	DayTemp := temps[0].Text() + "도"
 	NightTemp := temps[1].Text() + "도"
 
-	rains := doc.FindAll("strong", "class", "rainfall")
+	rains := doc.FindAll("span", "class", "rainfall")
 	DayRain := rains[0].Text()
 	NightRain := rains[1].Text()
 

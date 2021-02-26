@@ -40,14 +40,13 @@ func CreateURLMappings() {
 	// Create a limiter struct.
 	// Allow only 1 request per 1 second
 	limiter := tollbooth.NewLimiter(1, &limiter.ExpirableOptions{DefaultExpirationTTL: time.Hour})
-	limiter.SetMethods([]string{"GET", "POST"})
 
 	Router.Use(LimitHandler(limiter))
 
 	// Apply the middleware to the router (works with groups too)
 	Router.Use(cors.Middleware(cors.Config{
 		Origins:        "*",
-		Methods:        "*",
+		Methods:        "GET, POST",
 		RequestHeaders: "*",
 		Credentials:    true,
 	}))
