@@ -4,7 +4,7 @@
 </p>
 <h1>카카오톡 챗봇 Gin 서버 (Go언어)</h1>
 
-[@아주대 공지 챗봇](http://pf.kakao.com/_RUcxnK)
+[@아주대 공지 챗봇](http://pf.kakao.com/_RUcxnK) [MIT LICENSE](https://github.com/Alfex4936/KakaoChatBot-Golang/blob/main/LICENSE)
 
 <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FAlfex4936%2FkakaoChatbot-Ajou&count_bg=%23000000&title_bg=%23000000&icon=wechat.svg&icon_color=%23E7E7E7&title=%3A&edge_flat=true"/></a>
 
@@ -42,14 +42,14 @@ ubuntu:~/kakao_server$ go run main.go
 ```
 
 ## 기능
-* [오늘/어제 공지 불러오기](https://github.com/Alfex4936/kakaoChatbot-Golang#%EC%98%A4%EB%8A%98%EC%96%B4%EC%A0%9C-%EA%B3%B5%EC%A7%80-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0) (ListCard 최대 한계 5개)
-* [어제 공지](https://github.com/Alfex4936/kakaoChatbot-Golang#%EC%98%A4%EB%8A%98%EC%96%B4%EC%A0%9C-%EA%B3%B5%EC%A7%80-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0)는 MySQL DB를 통해 불러온다.
-* [마지막 공지 1개](https://github.com/Alfex4936/kakaoChatbot-Golang#%EB%A7%88%EC%A7%80%EB%A7%89-%EA%B3%B5%EC%A7%80-1%EA%B0%9C-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0) 불러오기 ("마지막 공지 알려줘")
-* [카테고리 선택](https://github.com/Alfex4936/kakaoChatbot-Golang#%EA%B3%B5%EC%A7%80-%EB%B6%84%EB%A5%98) (학사,학사일정,비교과,장학, 취업,사무,행사,파란학기제,학술,입학,기타)
-* [키워드 공지](https://github.com/Alfex4936/kakaoChatbot-Golang#%EA%B3%B5%EC%A7%80-%ED%82%A4%EC%9B%8C%EB%93%9C-%EA%B2%80%EC%83%89) 검색 ("2021 검색해줘")
-* [학사 일정](https://github.com/Alfex4936/kakaoChatbot-Golang#%ED%95%99%EC%82%AC-%EC%9D%BC%EC%A0%95-%EB%B3%B4%EA%B8%B0) 보기 ("달력", "일정")
-* [수원 날씨 보기](https://github.com/Alfex4936/kakaoChatbot-Golang#%EC%95%84%EC%A3%BC%EB%8C%80-%EC%A7%80%EC%97%AD-%EB%82%A0%EC%94%A8-%EB%B3%B4%EA%B8%B0) ("날씨", "우산")
-* [인물 검색](https://github.com/Alfex4936/kakaoChatbot-Golang#%EC%9D%B8%EB%AC%BC-%EA%B2%80%EC%83%89) ("인물" 입력 후 번호/학과/이름 원하는대로 검색)
+* [오늘/어제 공지 불러오기](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%98%A4%EB%8A%98%EC%96%B4%EC%A0%9C-%EA%B3%B5%EC%A7%80-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0) (ListCard 최대 한계 5개)
+* [어제 공지](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%98%A4%EB%8A%98%EC%96%B4%EC%A0%9C-%EA%B3%B5%EC%A7%80-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0)는 MySQL DB를 통해 불러온다.
+* [마지막 공지 1개](https://github.com/Alfex4936/KakaoChatBot-Golang#%EB%A7%88%EC%A7%80%EB%A7%89-%EA%B3%B5%EC%A7%80-1%EA%B0%9C-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0) 불러오기 ("마지막 공지 알려줘")
+* [카테고리 선택](https://github.com/Alfex4936/KakaoChatBot-Golang#%EA%B3%B5%EC%A7%80-%EB%B6%84%EB%A5%98) (학사,학사일정,비교과,장학, 취업,사무,행사,파란학기제,학술,입학,기타)
+* [키워드 공지](https://github.com/Alfex4936/KakaoChatBot-Golang#%EA%B3%B5%EC%A7%80-%ED%82%A4%EC%9B%8C%EB%93%9C-%EA%B2%80%EC%83%89) 검색 ("2021 검색해줘")
+* [학사 일정](https://github.com/Alfex4936/KakaoChatBot-Golang#%ED%95%99%EC%82%AC-%EC%9D%BC%EC%A0%95-%EB%B3%B4%EA%B8%B0) 보기 ("달력", "일정")
+* [수원 날씨 보기](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%95%84%EC%A3%BC%EB%8C%80-%EC%A7%80%EC%97%AD-%EB%82%A0%EC%94%A8-%EB%B3%B4%EA%B8%B0) ("날씨", "우산")
+* [인물 검색](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%9D%B8%EB%AC%BC-%EA%B2%80%EC%83%89) ("인물" 입력 후 번호/학과/이름 원하는대로 검색)
 
 ## 카카오 챗봇
 title, items, text... 길이를 넘기면 제대로 출력이 안될 수도 있다.
