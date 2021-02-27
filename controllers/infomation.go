@@ -31,6 +31,34 @@ func AskWeather(c *gin.Context) {
 	c.PureJSON(200, k.SimpleText{}.Build(msg, nil))
 }
 
+// AskWeatherInCard :POST /weather2
+// 메시지 종류: BasicCard
+func AskWeatherInCard(c *gin.Context) {
+	// 수원 영통구 현재 날씨 불러오기 (weather.naver.com)
+	weather, err := models.GetWeather()
+	if err != nil {
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("오류가 발생했습니다.\n:( 다시 시도해 주세요!", nil))
+		// http.StatusBadRequest 400을 보내고 싶으나, 400으로 하면 작동 X
+		return
+	}
+
+	basicCard := k.BasicCard{}.New(true, true) // 썸네일, 버튼
+
+	basicCard.Title = "[수원 영통구 기준]"
+
+	msg := fmt.Sprintf("현재 날씨는 %s, %s\n최고기온 %s, 최저기온은 %s\n\n낮, 밤 강수 확률은 %s, %s\n미세먼지 농도는 %s\n자외선 지수는 %s",
+		weather.CurrentStatus, weather.CurrentTemp,
+		weather.MinTemp, weather.MaxTemp,
+		weather.RainDay, weather.RainNight,
+		weather.FineDust, weather.UV)
+
+	basicCard.Desc = msg
+	basicCard.Buttons.Add(k.LinkButton{}.New("자세히", models.NaverWeather))
+	basicCard.ThumbNail = k.ThumbNail{FixedRatio: false}.New(fmt.Sprintf("https://raw.githubusercontent.com/Alfex4936/KakaoChatBot-Golang/main/imgs/%v.png?raw=true", weather.Icon))
+
+	c.PureJSON(200, basicCard.Build())
+}
+
 // SearchProf :POST /prof, MUST: "keyword": 검색어
 // 메시지 종류: CarouselCard
 func SearchProf(c *gin.Context) {

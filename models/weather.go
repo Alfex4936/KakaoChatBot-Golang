@@ -20,6 +20,7 @@ type Weather struct {
 	FineDust      string // 미세먼지 [보통, 나쁨]
 	UltraDust     string // 초미세먼지 [보통, 나쁨]
 	UV            string // 자외선 지수 [낮음, ]
+	Icon          string // 날씨 아이콘
 }
 
 // GetWeather is a function that parses suwon's weather today
@@ -49,6 +50,9 @@ func GetWeather() (Weather, error) {
 	// [미세먼지, 초미세먼지, 자외선, 일몰 시간]
 	statuses := doc.FindAll("em", "class", "level_text")
 
+	// 날씨 아이콘
+	img := doc.Find("div", "class", "today_weather").Find("i").Attrs()["data-ico"]
+
 	// struct 값 변경
 	weather.CurrentTemp = currentTempInt
 	weather.CurrentStatus = currentStatus.Text()
@@ -62,5 +66,7 @@ func GetWeather() (Weather, error) {
 	weather.FineDust = statuses[0].Text()
 	weather.UltraDust = statuses[1].Text()
 	weather.UV = statuses[2].Text()
+
+	weather.Icon = img
 	return weather, nil
 }

@@ -66,4 +66,7 @@ docker-id:
 docker-stop:
 	@docker stop kakao
 
+sync:
+	aws s3 sync . s3://$(bucket)/chatbot
+
 all: build run
