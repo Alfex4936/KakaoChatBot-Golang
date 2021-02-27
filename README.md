@@ -50,7 +50,8 @@ ubuntu:~/kakao_server$ go run main.go
 * [학사 일정](https://github.com/Alfex4936/KakaoChatBot-Golang#%ED%95%99%EC%82%AC-%EC%9D%BC%EC%A0%95-%EB%B3%B4%EA%B8%B0) 보기 ("달력", "일정")
 * [수원 날씨 보기](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%95%84%EC%A3%BC%EB%8C%80-%EC%A7%80%EC%97%AD-%EB%82%A0%EC%94%A8-%EB%B3%B4%EA%B8%B0) ("날씨", "우산")
 * [인물 검색](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%9D%B8%EB%AC%BC-%EA%B2%80%EC%83%89) ("인물" 입력 후 번호/학과/이름 원하는대로 검색)
-
+* [도서관 좌석 현황](https://github.com/Alfex4936/KakaoChatBot-Golang#%EB%8F%84%EC%84%9C%EA%B4%80-%EC%A2%8C%EC%84%9D-%ED%98%84%ED%99%A9) ("도서관", "좌석", 중앙 도서관 좌석이용 현황 불러옴)
+  
 ## 카카오 챗봇
 title, items, text... 길이를 넘기면 제대로 출력이 안될 수도 있다.
 
@@ -243,7 +244,7 @@ TO-DO: Selenium을 통한 자동 db 업데이트
 
 (수원 영통구 날씨를 weather.naver.com에서 불러옴)
 
-POST = /info/weather |
+POST = /info/weather2 |
  발화 = "날씨", "아주대 날씨", "날씨 좋아?" ...
 
 TO-DO: 더 나은 메시지 포맷 찾기
@@ -266,5 +267,19 @@ TO-DO: 더 나은 발화문
 <div align="center">
 <p>
     <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/search.jpg">
+</p>
+</div>
+
+## [도서관 좌석 현황]
+POST = /info/library |
+ 발화 = "도서관", "좌석"
+
+ 발화문 입력 시 중앙도서관 좌석 이용 현황을 불러옵니다.
+
+TO-DO: 더 나은 메시지 포맷
+
+<div align="center">
+<p>
+    <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/library.jpg">
 </p>
 </div>
