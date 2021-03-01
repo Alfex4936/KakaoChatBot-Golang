@@ -7,6 +7,9 @@ build:
 	go build -ldflags="-w -s" -o bin/main main/main.go
 	@echo Upxing...
 	upx bin/main
+ifneq ($(OS), Windows_NT)
+	chmod +x bin/main
+endif
 
 run:
 ifeq ($(OS), Windows_NT)

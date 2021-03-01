@@ -22,7 +22,7 @@ type Notice struct {
 
 // Parse is a function that parses a length of notices
 func Parse(url string, length int) []Notice { // doesn't support default value for parameters
-	var ajouHTML string = url
+	ajouHTML := url
 	if url == "" { // As default, use main link
 		ajouHTML = fmt.Sprintf("%v?mode=list&articleLimit=%v&article.offset=0", AjouLink, length)
 	}

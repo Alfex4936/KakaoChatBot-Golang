@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  kkt:
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    env_file:
+      - .env
+    environment:
+      GO111MODULE: "auto"
+    # volumes:
+    #   - ".:$GOPATH/src/chatbot"
+    container_name: kkt
+    ports:
+      - "8008:8008"

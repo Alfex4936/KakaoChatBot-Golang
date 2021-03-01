@@ -2,14 +2,16 @@ package models
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/anaskhan96/soup"
 )
 
 // const NaverWeather = "https://search.naver.com/search.naver?query=수원영통구날씨"
+// NaverWeather ...
 const NaverWeather = "https://weather.naver.com/today/02117530?cpName=ACCUWEATHER" // 아큐웨더 제공 날씨
 
-// Weather ...
+// Weather 해외 기상은 일출부터 일몰 전이 낮, 일몰부터 일출 전이 밤
 type Weather struct {
 	MaxTemp       string // 최고 온도
 	MinTemp       string // 최저 온도
@@ -17,10 +19,10 @@ type Weather struct {
 	CurrentStatus string // 흐림, 맑음 ...
 	RainDay       string // 강수 확률 낮
 	RainNight     string // 강수 확률 밤
-	FineDust      string // 미세먼지 [보통, 나쁨]
-	UltraDust     string // 초미세먼지 [보통, 나쁨]
-	UV            string // 자외선 지수 [낮음, ]
-	Icon          string // 날씨 아이콘
+	FineDust      string // 미세먼지
+	UltraDust     string // 초미세먼지
+	UV            string // 자외선 지수
+	Icon          string // 날씨 아이콘 (ico_animation_wt?)
 }
 
 // GetWeather is a function that parses suwon's weather today
@@ -67,6 +69,10 @@ func GetWeather() (Weather, error) {
 	weather.UltraDust = statuses[1].Text()
 	weather.UV = statuses[2].Text()
 
-	weather.Icon = img
+	if strings.Contains(img, "night") {
+		weather.Icon = img + "_night"
+	} else {
+		weather.Icon = img
+	}
 	return weather, nil
 }

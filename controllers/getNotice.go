@@ -18,7 +18,7 @@ func GetAllNotices(c *gin.Context) {
 
 	var notices []models.Notice
 	if _, err := dbmap.Select(&notices, models.PrintNotices, num); err != nil {
-		c.AbortWithStatusJSON(200, k.SimpleText{}.Build(err.Error(), nil))
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("오류가 발생했습니다.\n:( 다시 시도해 주세요!", nil))
 		return
 	}
 
@@ -58,7 +58,7 @@ func GetTodayNotices(c *gin.Context) {
 	var label string
 
 	now := time.Now()
-	nowStr := fmt.Sprintf("%v.%02v.%v", now.Year()%100, int(now.Month()), now.Day())
+	nowStr := fmt.Sprintf("%v.%02v.%02v", now.Year()%100, int(now.Month()), now.Day())
 	// nowStr := "21.02.10"
 
 	// Filtering out today's notice(s)
@@ -108,13 +108,13 @@ func GetTodayNotices(c *gin.Context) {
 // 메시지 종류: SimpleText | ListCard
 func GetYesterdayNotices(c *gin.Context) {
 	yesterday := time.Now().Add(-24 * time.Hour)
-	yesterdayStr := fmt.Sprintf("%v.%02v.%v", yesterday.Year()%100, int(yesterday.Month()), yesterday.Day())
+	yesterdayStr := fmt.Sprintf("%v.%02v.%02v", yesterday.Year()%100, int(yesterday.Month()), yesterday.Day())
 
 	var notices []models.Notice
 	var label string
 
 	if _, err := dbmap.Select(&notices, models.GetNoticesByDate, yesterdayStr); err != nil {
-		c.AbortWithStatusJSON(200, k.SimpleText{}.Build(err.Error(), nil))
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("오류가 발생했습니다.\n:( 다시 시도해 주세요!", nil))
 		return
 	}
 

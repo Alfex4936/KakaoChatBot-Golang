@@ -4,6 +4,7 @@ import (
 	"chatbot/models"
 	"fmt"
 	"strings"
+	"time"
 
 	k "github.com/Alfex4936/kakao"
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ func AskWeather(c *gin.Context) {
 	// 수원 영통구 현재 날씨 불러오기 (weather.naver.com)
 	weather, err := models.GetWeather()
 	if err != nil {
-		c.AbortWithStatusJSON(200, k.SimpleText{}.Build(err.Error(), nil))
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("오류가 발생했습니다.\n:( 다시 시도해 주세요!", nil))
 		// http.StatusBadRequest 400을 보내고 싶으나, 400으로 하면 작동 X
 		return
 	}
@@ -96,6 +97,138 @@ func SearchProf(c *gin.Context) {
 		// 전화 버튼, 웹 링크 버튼 케로셀에 담기
 		card.Buttons.Add(k.CallButton{}.New("전화", intel+person.TelNo))
 		card.Buttons.Add(k.LinkButton{}.New("이메일", fmt.Sprintf("mailto:%s?subject=안녕하세요.", person.Email)))
+
+		carousel.Cards.Add(card)
+	}
+
+	c.PureJSON(200, carousel.Build())
+}
+
+// GetSeatsAvailable :POST /library
+// 메시지 종류: BasicCard
+func GetSeatsAvailable(c *gin.Context) {
+	library, err := models.GetLibraryAvailable()
+	if err != nil {
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("오류가 발생했습니다.\n:( 다시 시도해 주세요!", nil))
+		// http.StatusBadRequest 400을 보내고 싶으나, 400으로 하면 작동 X
+		return
+	}
+
+	msg := []string{} // BasicCard.Description
+
+	basicCard := k.BasicCard{}.New(false, true) // 썸네일, 버튼
+
+	basicCard.Title = "[중앙도서관]"
+
+	for _, lib := range library.Data.List { // 모든 도서관
+		msg = append(msg, fmt.Sprintf("%v: %v/%v (잔여/전체)", lib.Name, lib.Available, lib.ActiveTotal))
+	}
+
+	basicCard.Desc = strings.Join(msg, "\n")
+	basicCard.Buttons.Add(k.LinkButton{}.New("중앙도서관 홈페이지", "https://library.ajou.ac.kr/#/"))
+
+	c.PureJSON(200, basicCard.Build())
+}
+
+// AskMeal :POST /meal
+// 메시지 종류: SimpleText
+func AskMeal(c *gin.Context) {
+	// JSON request parse
+	var kjson k.Request
+	if err := c.BindJSON(&kjson); err != nil {
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("오류가 발생했습니다.\n:( 다시 시도해 주세요!", nil)) // http.StatusBadRequest
+		return
+	}
+
+	userParams := kjson.Action.Params
+	var postDate, postPlace string
+
+	now := time.Now()
+	nowStr := fmt.Sprintf("%v%02v%02v", now.Year(), int(now.Month()), now.Day())
+	tomorrow := time.Now().Add(24 * time.Hour)
+	tomorrowStr := fmt.Sprintf("%v%02v%02v", tomorrow.Year(), int(tomorrow.Month()), tomorrow.Day())
+
+	switch userParams["when"].(string) {
+	case "오늘":
+		postDate = nowStr
+	case "내일":
+		postDate = tomorrowStr
+	default:
+		postDate = nowStr
+	}
+
+	switch userParams["place"].(string) {
+	case "기숙사":
+		postPlace = "63"
+	case "학생":
+		postPlace = "220"
+	case "학식":
+		postPlace = "220"
+	case "교직원":
+		postPlace = "221"
+	default:
+		postPlace = "220"
+	}
+
+	// fmt.Println(postPlace, postDate)
+	meal, err := models.GetMeal(postPlace, postDate)
+	if err != nil {
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("오류가 발생했습니다.\n:( 다시 시도해 주세요!", nil))
+		// http.StatusBadRequest 400을 보내고 싶으나, 400으로 하면 작동 X
+		return
+	}
+
+	var msg, breakfast, lunch, dinner, snack string
+
+	if meal.Data.Breakfast != "" {
+		breakfast = fmt.Sprintf("\n\n%v", meal.Data.Breakfast)
+	}
+	if meal.Data.Lunch != "" {
+		lunch = fmt.Sprintf("\n\n%v", meal.Data.Lunch)
+	}
+	if meal.Data.Dinner != "" {
+		dinner = fmt.Sprintf("\n\n%v", meal.Data.Dinner)
+	}
+	if meal.Data.SnackBar != "" {
+		snack = fmt.Sprintf("\n\n%v", meal.Data.SnackBar)
+	}
+
+	if meal.IsSuccess == "empty" {
+		msg = fmt.Sprintf("%s의 %s 식단이 없습니다!", userParams["when"].(string), userParams["place"].(string))
+	} else {
+		msg = fmt.Sprintf("[%v] %v%v%v%v%v",
+			meal.Data.Date, meal.Data.Name,
+			breakfast, lunch, dinner, snack)
+	}
+
+	var quickReplies k.Kakao
+	quickReplies.Add(k.QuickReply{}.New("오늘 학식", "오늘 학식"))
+	quickReplies.Add(k.QuickReply{}.New("오늘 기숙사", "오늘 기숙사"))
+	quickReplies.Add(k.QuickReply{}.New("내일 교직원", "내일 교직원"))
+
+	c.PureJSON(200, k.SimpleText{}.Build(msg, quickReplies))
+}
+
+// AskJob :POST /job
+// 메시지 종류: CarouselCard
+func AskJob(c *gin.Context) {
+	job, err := models.GetJobsAvailable()
+	if err != nil {
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build(err.Error(), nil))
+		return
+	}
+
+	// Carousel (BasicCard)
+	carousel := k.Carousel{}.New(false, false)
+
+	for _, jobInfo := range job.Data {
+		// basicCard 케로셀에 담기
+		card := k.BasicCard{}.New(false, true)
+		card.Title = jobInfo.Title
+		card.Desc = fmt.Sprintf("공고 날짜: %v", jobInfo.Date)
+
+		// 웹 링크 버튼 케로셀에 담기
+		card.Buttons.Add(k.LinkButton{}.New("자세히", jobInfo.URL))
 
 		carousel.Cards.Add(card)
 	}

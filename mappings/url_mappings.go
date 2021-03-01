@@ -51,7 +51,6 @@ func CreateURLMappings() {
 		Credentials:    true,
 	}))
 
-	// Router.Use(controllers.Cors())
 	v1 := Router.Group("/v1")
 	{
 		v1.GET("/", Welcome)
@@ -64,7 +63,11 @@ func CreateURLMappings() {
 		v1.POST("/schedule", controllers.GetSchedule)
 		v1.POST("/search", controllers.SearchKeyword)
 		// Infomation
-		v1.POST("/info/weather", controllers.AskWeather)
+		// v1.POST("/info/weather", controllers.AskWeather)
+		v1.POST("/info/weather2", controllers.AskWeatherInCard)
 		v1.POST("/info/prof", controllers.SearchProf)
+		v1.POST("/info/library", controllers.GetSeatsAvailable)
+		v1.POST("/info/meal", controllers.AskMeal)
+		v1.POST("/info/job", controllers.AskJob)
 	}
 }

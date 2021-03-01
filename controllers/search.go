@@ -16,7 +16,7 @@ func SearchKeyword(c *gin.Context) {
 	// JSON request parse
 	var kjson k.Request
 	if err := c.BindJSON(&kjson); err != nil {
-		c.AbortWithStatusJSON(200, k.SimpleText{}.Build(err.Error(), nil)) // http.StatusBadRequest
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("오류가 발생했습니다.\n:( 다시 시도해 주세요!", nil)) // http.StatusBadRequest
 		return
 	}
 

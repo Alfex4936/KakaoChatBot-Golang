@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -42,7 +42,7 @@ func GetPeople(keyword string) (People, error) {
 	defer resp.Body.Close()
 
 	// Response 체크.
-	respBody, err := ioutil.ReadAll(resp.Body)
+	respBody, err := io.ReadAll(resp.Body)
 	json.Unmarshal(respBody, &people)
 	if err != nil {
 		fmt.Println(err)

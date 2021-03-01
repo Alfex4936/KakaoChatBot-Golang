@@ -20,7 +20,7 @@ func GetSchedule(c *gin.Context) {
 	carousel := k.Carousel{}.New(false, false)
 
 	if _, err := dbmap.Select(&schedules, models.LoadSchedule); err != nil {
-		c.AbortWithStatusJSON(200, k.SimpleText{}.Build(err.Error(), nil))
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("오류가 발생했습니다.\n:( 다시 시도해 주세요!", nil))
 		return
 	}
 
