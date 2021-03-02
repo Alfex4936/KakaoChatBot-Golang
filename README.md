@@ -51,6 +51,8 @@ ubuntu:~/kakao_server$ go run main.go
 * [수원 날씨 보기](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%95%84%EC%A3%BC%EB%8C%80-%EC%A7%80%EC%97%AD-%EB%82%A0%EC%94%A8-%EB%B3%B4%EA%B8%B0) ("날씨", "우산")
 * [인물 검색](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%9D%B8%EB%AC%BC-%EA%B2%80%EC%83%89) ("인물" 입력 후 번호/학과/이름 원하는대로 검색)
 * [도서관 좌석 현황](https://github.com/Alfex4936/KakaoChatBot-Golang#%EB%8F%84%EC%84%9C%EA%B4%80-%EC%A2%8C%EC%84%9D-%ED%98%84%ED%99%A9) ("도서관", "좌석", 중앙 도서관 좌석이용 현황 불러옴)
+* [학식 보기](https://github.com/Alfex4936/KakaoChatBot-Golang#%ED%95%99%EC%8B%9D-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0) ("오늘/내일 장소", "장소=학생,교직원,기숙사")
+* [채용 정보] ("채용" 교내 채용 정보 10개를 불러옴)
   
 ## 카카오 챗봇
 title, items, text... 길이를 넘기면 제대로 출력이 안될 수도 있다.
