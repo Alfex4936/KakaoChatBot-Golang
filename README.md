@@ -247,15 +247,13 @@ TO-DO: Selenium을 통한 자동 db 업데이트
 POST = /info/weather2 |
  발화 = "날씨", "아주대 날씨", "날씨 좋아?" ...
 
-TO-DO: 더 나은 메시지 포맷 찾기
-
 <div align="center">
 <p>
     <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/weather.jpg">
 </p>
 </div>
 
-## [인물 검색](https://github.com/Alfex4936/KakaoChatBot-Golang/blob/main/controllers/infomation.go#L35)
+## [인물 검색](https://github.com/Alfex4936/KakaoChatBot-Golang/blob/main/controllers/infomation.go#L65)
 
 POST = /info/prof |
  발화 = "인물"
@@ -270,7 +268,7 @@ TO-DO: 더 나은 발화문
 </p>
 </div>
 
-## [도서관 좌석 현황]
+## [도서관 좌석 현황](https://github.com/Alfex4936/KakaoChatBot-Golang/blob/main/controllers/infomation.go#L109)
 POST = /info/library |
  발화 = "도서관", "좌석"
 
@@ -281,5 +279,19 @@ TO-DO: 더 나은 메시지 포맷
 <div align="center">
 <p>
     <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/library.jpg">
+</p>
+</div>
+
+## [학식 불러오기](https://github.com/Alfex4936/KakaoChatBot-Golang/blob/main/controllers/infomation.go#L135)
+POST = /info/meal |
+ 발화 = "오늘 학식", "내일 학생", "내일 교직원", "내일 기숙사" ...
+
+ 오늘/내일 장소를 입력하면 시간에 맞는 장소의 학식 정보를 불러옵니다.
+
+TO-DO: 더 나은 메시지 포맷
+
+<div align="center">
+<p>
+    <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/meal.png">
 </p>
 </div>

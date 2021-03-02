@@ -33,8 +33,8 @@ var Router *gin.Engine
 
 // CreateURLMappings to make endpoints
 func CreateURLMappings() {
-	// gin.SetMode(gin.ReleaseMode)
-	gin.SetMode(gin.DebugMode)
+	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.DebugMode)
 	Router = gin.New()
 
 	// Create a limiter struct.

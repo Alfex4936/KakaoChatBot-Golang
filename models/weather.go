@@ -53,7 +53,8 @@ func GetWeather() (Weather, error) {
 	statuses := doc.FindAll("em", "class", "level_text")
 
 	// 날씨 아이콘
-	img := doc.Find("div", "class", "today_weather").Find("i").Attrs()["data-ico"]
+	i := doc.Find("div", "class", "today_weather").Find("i").Attrs()
+	img := i["data-ico"]
 
 	// struct 값 변경
 	weather.CurrentTemp = currentTempInt
@@ -69,7 +70,7 @@ func GetWeather() (Weather, error) {
 	weather.UltraDust = statuses[1].Text()
 	weather.UV = statuses[2].Text()
 
-	if strings.Contains(img, "night") {
+	if strings.Contains(i["class"], "night") {
 		weather.Icon = img + "_night"
 	} else {
 		weather.Icon = img
