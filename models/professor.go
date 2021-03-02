@@ -7,9 +7,11 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 )
 
-const AjouPeople = "https://mportal.ajou.ac.kr/system/phone/selectList.ajax"
+// AjouPeople ...
+var AjouPeople = os.Getenv("AJOU_PEOPLE")
 
 type People struct {
 	MsgCode     string `json:"msgCode"`

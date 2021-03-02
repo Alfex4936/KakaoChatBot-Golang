@@ -148,7 +148,10 @@ func AskMeal(c *gin.Context) {
 	tomorrow := time.Now().Add(24 * time.Hour)
 	tomorrowStr := fmt.Sprintf("%v%02v%02v", tomorrow.Year(), int(tomorrow.Month()), tomorrow.Day())
 
-	switch userParams["when"].(string) {
+	when := userParams["when"].(string)
+	place := userParams["place"].(string)
+
+	switch when {
 	case "오늘":
 		postDate = nowStr
 	case "내일":
@@ -157,16 +160,17 @@ func AskMeal(c *gin.Context) {
 		postDate = nowStr
 	}
 
-	switch userParams["place"].(string) {
-	case "기숙사":
+	if strings.Contains(place, "기숙사") {
+		place = "기숙사"
 		postPlace = "63"
-	case "학생":
+	} else if strings.Contains(place, "학생") || strings.Contains(place, "학식") {
+		place = "학생"
 		postPlace = "220"
-	case "학식":
-		postPlace = "220"
-	case "교직원":
+	} else if strings.Contains(place, "교직원") {
+		place = "교직원"
 		postPlace = "221"
-	default:
+	} else {
+		place = "학생"
 		postPlace = "220"
 	}
 
@@ -194,7 +198,7 @@ func AskMeal(c *gin.Context) {
 	}
 
 	if meal.IsSuccess == "empty" {
-		msg = fmt.Sprintf("%s의 %s 식단이 없습니다!", userParams["when"].(string), userParams["place"].(string))
+		msg = fmt.Sprintf("%s의 %s 식단이 없습니다!", when, place)
 	} else {
 		msg = fmt.Sprintf("[%v] %v%v%v%v%v",
 			meal.Data.Date, meal.Data.Name,
