@@ -78,11 +78,12 @@ func GetTodayNotices(c *gin.Context) {
 
 	if len(notices) > 5 {
 		label = fmt.Sprintf("%v개 더보기", len(notices)-5)
+		listCard.Buttons.Add(k.MsgButton{}.New(fmt.Sprintf("%v개 더보기", len(notices)-5), "더보기"))
 		notices = notices[:5]
 	} else {
+		listCard.Buttons.Add(k.LinkButton{}.New(label, models.AjouLink))
 		label = "아주대학교 공지"
 	}
-	listCard.Buttons.Add(k.LinkButton{}.New(label, models.AjouLink))
 
 	if len(notices) == 0 {
 		listCard.Items.Add(k.ListItem{}.New("공지가 없습니다!", "", "http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg"))
@@ -102,6 +103,60 @@ func GetTodayNotices(c *gin.Context) {
 	listCard.QuickReplies.Add(k.QuickReply{}.New("어제", "어제 공지 보여줘"))
 
 	c.PureJSON(200, listCard.Build())
+}
+
+// GetTodayMoreNotices Carousel + BasicCard + CarouselHeader
+func GetTodayMoreNotices(c *gin.Context) {
+	var notices []models.Notice = models.Parse("", 30)
+
+	now := time.Now()
+	today := fmt.Sprintf("%v월 %v일)", int(now.Month()), now.Day())
+	nowStr := fmt.Sprintf("%v.%02v.%02v", now.Year()%100, int(now.Month()), now.Day())
+	// nowStr := "21.02.10"
+
+	// Filtering out today's notice(s)
+	for i, notice := range notices {
+		if notice.Date != nowStr {
+			notices = notices[:i]
+			break
+		}
+	}
+
+	if len(notices) <= 5 { // 잘못된 접근 방지
+		var quickReplies k.Kakao
+		quickReplies.Add(k.QuickReply{}.New("오늘 공지", "ㅗ"))
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("공지가 5개 밖에 없어요!", quickReplies))
+		return
+	}
+
+	// Carousel + QuickReplies
+	carousel := k.Carousel{}.New(false, true)
+	carousel.Header = k.CarouselHeader{}.New(fmt.Sprintf("오늘 공지 총 %d개", len(notices)), fmt.Sprintf("%d개를 더 불러왔습니다!", len(notices)-5), "http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg")
+
+	if len(notices) == 0 {
+		card := k.BasicCard{}.New(true, false)
+		card.Title = "공지가 없습니다!"
+		card.ThumbNail = k.ThumbNail{}.New("http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg")
+	} else {
+		for _, notice := range notices[5:] {
+			// if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
+			// 	notice.Title = string([]rune(notice.Title)[0:33]) + ".."
+			// }
+			description := fmt.Sprintf("%v %v", today, notice.Writer)
+
+			card := k.BasicCard{}.New(false, true)
+			card.Title = description
+			card.Desc = notice.Title
+			card.Buttons.Add(k.LinkButton{}.New("공지 보기", notice.Link))
+			carousel.Cards.Add(card)
+		}
+	}
+
+	// Add Two quick replies
+	// carousel.QuickReplies.Add(k.QuickReply{}.New("오늘", "오늘 공지 보여줘"))
+	// carousel.QuickReplies.Add(k.QuickReply{}.New("어제", "어제 공지 보여줘"))
+
+	c.PureJSON(200, carousel.Build())
 }
 
 // GetYesterdayNotices :POST /today

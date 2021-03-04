@@ -44,6 +44,7 @@ ubuntu:~/kakao_server$ go run main.go
 ## 기능
 * [오늘/어제 공지 불러오기](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%98%A4%EB%8A%98%EC%96%B4%EC%A0%9C-%EA%B3%B5%EC%A7%80-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0) (ListCard 최대 한계 5개)
 * [어제 공지](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%98%A4%EB%8A%98%EC%96%B4%EC%A0%9C-%EA%B3%B5%EC%A7%80-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0)는 MySQL DB를 통해 불러온다.
+* [오늘 공지 더보기](https://github.com/Alfex4936/KakaoChatBot-Golang#%EC%98%A4%EB%8A%98-%EA%B3%B5%EC%A7%80-%EB%8D%94%EB%B3%B4%EA%B8%B0) ("오늘 공지"에서 더보기를 누르면 10개 정도를 더 볼 수 있습니다.)
 * [마지막 공지 1개](https://github.com/Alfex4936/KakaoChatBot-Golang#%EB%A7%88%EC%A7%80%EB%A7%89-%EA%B3%B5%EC%A7%80-1%EA%B0%9C-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0) 불러오기 ("마지막 공지 알려줘")
 * [카테고리 선택](https://github.com/Alfex4936/KakaoChatBot-Golang#%EA%B3%B5%EC%A7%80-%EB%B6%84%EB%A5%98) (학사,학사일정,비교과,장학, 취업,사무,행사,파란학기제,학술,입학,기타)
 * [키워드 공지](https://github.com/Alfex4936/KakaoChatBot-Golang#%EA%B3%B5%EC%A7%80-%ED%82%A4%EC%9B%8C%EB%93%9C-%EA%B2%80%EC%83%89) 검색 ("2021 검색해줘")
@@ -184,6 +185,20 @@ POST = /today, /yesterday | 발화 =
 <p>
     <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/yesterday.png">
     <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/today.png">
+</p>
+</div>
+
+## [오늘 공지 더보기](https://github.com/Alfex4936/KakaoChatBot-Golang/blob/main/controllers/getNotice.go#L109)
+
+POST = /today2
+
+"오늘" 공지에서 더보기를 누르면 10개 정도의 공지를 더 불러옵니다.
+
+(5개 이하일 시 아주대 홈피로 이동됨)
+
+<div align="center">
+<p>
+    <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/more_notices.jpg">
 </p>
 </div>
 
