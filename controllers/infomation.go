@@ -47,7 +47,7 @@ func AskWeatherInCard(c *gin.Context) {
 
 	basicCard.Title = "[수원 영통구 기준]"
 
-	msg := fmt.Sprintf("현재 날씨는 %s, %s\n최고기온 %s, 최저기온은 %s\n\n낮, 밤 강수 확률은 %s, %s\n미세먼지 농도는 %s\n자외선 지수는 %s",
+	msg := fmt.Sprintf("현재 날씨는 %s, %s\n최저기온 %s, 최고기온은 %s\n\n낮, 밤 강수 확률은 %s, %s\n미세먼지 농도는 %s\n자외선 지수는 %s",
 		weather.CurrentStatus, weather.CurrentTemp,
 		weather.MinTemp, weather.MaxTemp,
 		weather.RainDay, weather.RainNight,
