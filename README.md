@@ -8,6 +8,10 @@
 
 <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FAlfex4936%2FkakaoChatbot-Ajou&count_bg=%23000000&title_bg=%23000000&icon=wechat.svg&icon_color=%23E7E7E7&title=%3A&edge_flat=true"/></a>
 
+<p>
+    <img width="300" src="https://github.com/Alfex4936/kakaoChatbot-Ajou/blob/main/imgs/kkt.png">
+</p>
+
 <a href="http://pf.kakao.com/_RUcxnK"><img src="https://badgen.net/uptime-robot/status/m786780621-6bbd0da746df747d7b6835c8"></img></a>
 
 </div>
