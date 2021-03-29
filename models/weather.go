@@ -7,6 +7,8 @@ import (
 	"github.com/anaskhan96/soup"
 )
 
+// ! TODO : 카카오톡 날씨에서나 현재에서 내일 날씨 peek
+
 // const NaverWeather = "https://search.naver.com/search.naver?query=수원영통구날씨"
 // NaverWeather ...
 const NaverWeather = "https://weather.naver.com/today/02117530?cpName=ACCUWEATHER" // 아큐웨더 제공 날씨

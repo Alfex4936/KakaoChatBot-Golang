@@ -125,7 +125,7 @@ func GetTodayMoreNotices(c *gin.Context) {
 	if len(notices) <= 5 { // 잘못된 접근 방지
 		var quickReplies k.Kakao
 		quickReplies.Add(k.QuickReply{}.New("오늘 공지", "ㅗ"))
-		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("공지가 5개 밖에 없어요!", quickReplies))
+		c.AbortWithStatusJSON(200, k.SimpleText{}.Build("공지가 5개 정도 뿐이에요!", quickReplies))
 		return
 	}
 
