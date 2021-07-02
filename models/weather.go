@@ -62,7 +62,7 @@ func GetWeather() (Weather, error) {
 	weather.CurrentTemp = currentTempInt
 	weather.CurrentStatus = currentStatus.Text()
 
-	weather.MaxTemp = DayTemp // Assume that (day temp > night temp) in general
+	weather.MaxTemp = DayTemp // Assert that (day temp > night temp) in general
 	weather.MinTemp = NightTemp
 
 	weather.RainDay = DayRain
