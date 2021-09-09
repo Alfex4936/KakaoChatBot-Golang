@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-	"unicode/utf8"
 
 	k "github.com/Alfex4936/kakao"
 	"github.com/gin-gonic/gin"
@@ -41,9 +40,9 @@ func GetLastNotice(c *gin.Context) {
 	// Add button
 	listCard.Buttons.Add(k.ShareButton{}.New("공유하기"))
 
-	if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
-		notice.Title = string([]rune(notice.Title)[0:32]) + "..."
-	}
+	// if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
+	// 	notice.Title = string([]rune(notice.Title)[0:32]) + "..."
+	// }
 	description := fmt.Sprintf("%v %v", notice.Writer, notice.Date[len(notice.Date)-5:])
 
 	listCard.Items.Add(k.ListItemLink{}.New(notice.Title, description, "", notice.Link))
@@ -89,9 +88,9 @@ func GetTodayNotices(c *gin.Context) {
 		listCard.Items.Add(k.ListItem{}.New("공지가 없습니다!", "", "http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg"))
 	} else {
 		for _, notice := range notices {
-			if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
-				notice.Title = string([]rune(notice.Title)[0:32]) + "..."
-			}
+			// if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
+			// 	notice.Title = string([]rune(notice.Title)[0:32]) + "..."
+			// }
 			description := fmt.Sprintf("%v %v", notice.Writer, notice.Date[len(notice.Date)-5:])
 
 			listCard.Items.Add(k.ListItemLink{}.New(notice.Title, description, "", notice.Link))
@@ -193,9 +192,9 @@ func GetYesterdayNotices(c *gin.Context) {
 		listCard.Items.Add(k.ListItem{}.New("공지가 없습니다!", "", "http://k.kakaocdn.net/dn/APR96/btqqH7zLanY/kD5mIPX7TdD2NAxgP29cC0/1x1.jpg"))
 	} else {
 		for _, notice := range notices {
-			if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
-				notice.Title = string([]rune(notice.Title)[0:32]) + "..."
-			}
+			// if utf8.RuneCountInString(notice.Title) > 35 { // To count korean letters length correctly
+			// 	notice.Title = string([]rune(notice.Title)[0:32]) + "..."
+			// }
 			description := fmt.Sprintf("%v %v", notice.Writer, notice.Date[len(notice.Date)-5:])
 
 			listCard.Items.Add(k.ListItemLink{}.New(notice.Title, description, "", notice.Link))
