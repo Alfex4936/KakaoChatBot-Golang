@@ -50,6 +50,9 @@ func Parse(url string, length int) []Notice { // doesn't support default value f
 	writers := doc.FindAll("span", "class", "b-writer")
 	for i := 0; i < len(ids); i++ {
 		id, _ := strconv.ParseInt(strings.TrimSpace(ids[i].Text()), 10, 64)
+		if err != nil {
+			continue // 최상위 공지
+		}
 		title := strings.TrimSpace(titles[i].Find("a").Text())
 		link := titles[i].Find("a").Attrs()["href"]
 		category := strings.TrimSpace(categories[i].Text())
